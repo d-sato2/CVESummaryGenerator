@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 /// <summary>
 /// CVEのAPIからダウンロードしたJSONデータのデシリアライズ用クラス。
@@ -15,87 +14,84 @@ namespace CVESummaryGenerator
     {
         public class AffectedProduct
         {
-            public string name { get; set; }
-            public object platform { get; set; }
-            public int impactId { get; set; }
-            public string impact { get; set; }
-            public int severityId { get; set; }
-            public string severity { get; set; }
-            public double baseScore { get; set; }
-            public double temporalScore { get; set; }
-            public double environmentScore { get; set; }
-            public string vectorString { get; set; }
-            public object supersedence { get; set; }
-            public object knowledgeBaseId { get; set; }
-            public object knowledgeBaseUrl { get; set; }
-            public object monthlyKnowledgeBaseId { get; set; }
-            public object monthlyKnowledgeBaseUrl { get; set; }
-            public object downloadUrl { get; set; }
-            public object downloadTitle { get; set; }
-            public object monthlyDownloadUrl { get; set; }
-            public object monthlyDownloadTitle { get; set; }
-            public string articleTitle1 { get; set; }
-            public string articleUrl1 { get; set; }
-            public string downloadTitle1 { get; set; }
-            public string downloadUrl1 { get; set; }
-            public bool doesRowOneHaveAtLeastOneArticleOrUrl { get; set; }
-            public string articleTitle2 { get; set; }
-            public object articleUrl2 { get; set; }
-            public string downloadTitle2 { get; set; }
-            public object downloadUrl2 { get; set; }
-            public bool doesRowTwoHaveAtLeastOneArticleOrUrl { get; set; }
-            public string articleTitle3 { get; set; }
-            public object articleUrl3 { get; set; }
-            public string downloadTitle3 { get; set; }
-            public object downloadUrl3 { get; set; }
-            public bool doesRowThreeHaveAtLeastOneArticleOrUrl { get; set; }
-            public string articleTitle4 { get; set; }
-            public object articleUrl4 { get; set; }
-            public string downloadTitle4 { get; set; }
-            public object downloadUrl4 { get; set; }
-            public bool doesRowFourHaveAtLeastOneArticleOrUrl { get; set; }
-            public int countOfRowsWithAtLeastOneArticleOrUrl { get; set; }
+            public string Name { get; set; }
+            public object Platform { get; set; }
+            public int ImpactId { get; set; }
+            public string Impact { get; set; }
+            public int SeverityId { get; set; }
+            public string Severity { get; set; }
+            public double BaseScore { get; set; }
+            public double TemporalScore { get; set; }
+            public double EnvironmentScore { get; set; }
+            public string VectorString { get; set; }
+            public object Supersedence { get; set; }
+            public object KnowledgeBaseId { get; set; }
+            public object KnowledgeBaseUrl { get; set; }
+            public object MonthlyKnowledgeBaseId { get; set; }
+            public object MonthlyKnowledgeBaseUrl { get; set; }
+            public object DownloadUrl { get; set; }
+            public object DownloadTitle { get; set; }
+            public object MonthlyDownloadUrl { get; set; }
+            public object MonthlyDownloadTitle { get; set; }
+            public string ArticleTitle1 { get; set; }
+            public string ArticleUrl1 { get; set; }
+            public string DownloadTitle1 { get; set; }
+            public string DownloadUrl1 { get; set; }
+            public bool DoesRowOneHaveAtLeastOneArticleOrUrl { get; set; }
+            public string ArticleTitle2 { get; set; }
+            public object ArticleUrl2 { get; set; }
+            public string DownloadTitle2 { get; set; }
+            public object DownloadUrl2 { get; set; }
+            public bool DoesRowTwoHaveAtLeastOneArticleOrUrl { get; set; }
+            public string ArticleTitle3 { get; set; }
+            public object ArticleUrl3 { get; set; }
+            public string DownloadTitle3 { get; set; }
+            public object DownloadUrl3 { get; set; }
+            public bool DoesRowThreeHaveAtLeastOneArticleOrUrl { get; set; }
+            public string ArticleTitle4 { get; set; }
+            public object ArticleUrl4 { get; set; }
+            public string DownloadTitle4 { get; set; }
+            public object DownloadUrl4 { get; set; }
+            public bool DoesRowFourHaveAtLeastOneArticleOrUrl { get; set; }
+            public int CountOfRowsWithAtLeastOneArticleOrUrl { get; set; }
         }
 
         public class Revision
         {
-            public string version { get; set; }
-            public DateTime date { get; set; }
-            public string description { get; set; }
-        }
-
-        public class LatestReleaseExploitability
-        {
-            public int id { get; set; }
-            public string name { get; set; }
-        }
-
-        public class OlderReleaseExploitability
-        {
-            public int id { get; set; }
-            public string name { get; set; }
+            public string Version { get; set; }
+            public DateTime Date { get; set; }
+            public string Description { get; set; }
         }
 
         public class ExploitabilityAssessment
         {
-            public LatestReleaseExploitability latestReleaseExploitability { get; set; }
-            public OlderReleaseExploitability olderReleaseExploitability { get; set; }
-            public object denialOfServiceExploitability { get; set; }
+            public class LatestReleaseExploitability
+            {
+                public int Id { get; set; }
+                public string Name { get; set; }
+            }
+
+            public class OlderReleaseExploitability
+            {
+                public int Id { get; set; }
+                public string Name { get; set; }
+            }
+
+            public object DenialOfServiceExploitability { get; set; }
         }
 
-        public DateTime publishedDate { get; set; }
-        public string cveNumber { get; set; }
-        public List<AffectedProduct> affectedProducts { get; set; }
-        public string cveTitle { get; set; }
-        public string description { get; set; }
-        public List<object> workarounds { get; set; }
-        public List<object> mitigations { get; set; }
-        public List<object> acknowledgments { get; set; }
-        public string disclaimer { get; set; }
-        public List<Revision> revisions { get; set; }
-        public string frequentlyAskedQuestions { get; set; }
-        public ExploitabilityAssessment exploitabilityAssessment { get; set; }
-        public string publiclyDisclosed { get; set; }
-        public string exploited { get; set; }
+        public DateTime PublishedDate { get; set; }
+        public string CveNumber { get; set; }
+        public List<AffectedProduct> AffectedProducts { get; set; }
+        public string CveTitle { get; set; }
+        public string Description { get; set; }
+        public List<object> Workarounds { get; set; }
+        public List<object> Mitigations { get; set; }
+        public List<object> Acknowledgments { get; set; }
+        public string Disclaimer { get; set; }
+        public List<Revision> Revisions { get; set; }
+        public string FrequentlyAskedQuestions { get; set; }
+        public string PubliclyDisclosed { get; set; }
+        public string Exploited { get; set; }
     }
 }

@@ -52,22 +52,24 @@ namespace CVESummaryGenerator
             //まとめ作成
             //全製品共通項目
             Console.WriteLine("CVE:{0}", cve);
-            Console.WriteLine("概要:{0}", sg.cveTitle);
-            Console.WriteLine("詳細:{0}", sg.description.Replace("\n", ""));
-            Console.WriteLine("一般に公開:{0}", sg.publiclyDisclosed); // 一般に公開
-            Console.WriteLine("悪用:{0}", sg.exploited); // 悪用
+            Console.WriteLine("概要:{0}", sg.CveTitle);
+            Console.WriteLine("詳細:{0}", sg.Description.Replace("\n", ""));
+            Console.WriteLine("一般に公開:{0}", sg.PubliclyDisclosed); // 一般に公開
+            Console.WriteLine("悪用:{0}", sg.Exploited); // 悪用
+            SecurityGuidance.ExploitabilityAssessment.LatestReleaseExploitability LatestReleaseExploitability = new SecurityGuidance.ExploitabilityAssessment.LatestReleaseExploitability();
+            SecurityGuidance.ExploitabilityAssessment.OlderReleaseExploitability OlderReleaseExploitability = new SecurityGuidance.ExploitabilityAssessment.OlderReleaseExploitability();
             Console.WriteLine("最新のソフトウェア リリース:{0}-{1}"
-                                , sg.exploitabilityAssessment.latestReleaseExploitability.id
-                                , sg.exploitabilityAssessment.latestReleaseExploitability.name); // 最新のソフトウェア リリース
+                                , LatestReleaseExploitability.Id
+                                , LatestReleaseExploitability.Name); // 最新のソフトウェア リリース
             Console.WriteLine("過去のソフトウェア リリース:{0}-{1}"
-                                , sg.exploitabilityAssessment.olderReleaseExploitability.id
-                                , sg.exploitabilityAssessment.olderReleaseExploitability.name); // 過去のソフトウェア リリース
+                                , OlderReleaseExploitability.Id
+                                , OlderReleaseExploitability.Name); // 過去のソフトウェア リリース
 
             // TODO：「サービス拒否」の項目はjsonにないのか確認
 
             //各製品共通項目
             // sg.affectedProducts.ForEach(n => Console.WriteLine("name:{0}, vectorstring:{1}", n.name, n.vectorString));
-            var targetProducts = sg.affectedProducts.Where(n => n.name == WIN2008 || n.name == WIN2012 || n.name == WIN2016);
+            var targetProducts = sg.AffectedProducts.Where(n => n.Name == WIN2008 || n.Name == WIN2012 || n.Name == WIN2016);
             var listCVSS = new List<string>();
             var listbaseScore = new List<double>();
             var listtemporalScore = new List<double>();
@@ -85,46 +87,46 @@ namespace CVESummaryGenerator
                     isFirst = false;
                 }
 
-                if (product.name == WIN2008) { containsWIN2008 = "○"; }
-                if (product.name == WIN2012) { containsWIN2012 = "○"; }
-                if (product.name == WIN2016) { containsWIN2016 = "○"; }
+                if (product.Name == WIN2008) { containsWIN2008 = "○"; }
+                if (product.Name == WIN2012) { containsWIN2012 = "○"; }
+                if (product.Name == WIN2016) { containsWIN2016 = "○"; }
 
-                if (summaryOfTargetProducts.vectorString == null)
+                if (summaryOfTargetProducts.VectorString == null)
                 {
-                    summaryOfTargetProducts.vectorString = product.vectorString;
+                    summaryOfTargetProducts.VectorString = product.VectorString;
                 }
-                else if (!summaryOfTargetProducts.vectorString.Equals(product.vectorString))
+                else if (!summaryOfTargetProducts.VectorString.Equals(product.VectorString))
                 {
-                    summaryOfTargetProducts.vectorString = "vectorStringの中に一致しないものがあります";
+                    summaryOfTargetProducts.VectorString = "vectorStringの中に一致しないものがあります";
                 }
-                Console.WriteLine(summaryOfTargetProducts.vectorString);
+                Console.WriteLine(summaryOfTargetProducts.VectorString);
 
-                if (!summaryOfTargetProducts.baseScore.Equals(product.baseScore))
+                if (!summaryOfTargetProducts.BaseScore.Equals(product.BaseScore))
                 {
-                    summaryOfTargetProducts.baseScore = 0;
+                    summaryOfTargetProducts.BaseScore = 0;
                     Console.WriteLine("baseScoreの中に一致しないものがあります");
                 }
-                Console.WriteLine(summaryOfTargetProducts.baseScore);
+                Console.WriteLine(summaryOfTargetProducts.BaseScore);
 
-                if (!summaryOfTargetProducts.temporalScore.Equals(product.temporalScore))
+                if (!summaryOfTargetProducts.TemporalScore.Equals(product.TemporalScore))
                 {
-                    summaryOfTargetProducts.temporalScore = 0;
+                    summaryOfTargetProducts.TemporalScore = 0;
                     Console.WriteLine("temporalScoreの中に一致しないものがあります");
                 }
-                Console.WriteLine(summaryOfTargetProducts.temporalScore);
+                Console.WriteLine(summaryOfTargetProducts.TemporalScore);
 
-                if (!summaryOfTargetProducts.severity.Equals(product.severity))
+                if (!summaryOfTargetProducts.Severity.Equals(product.Severity))
                 {
-                    summaryOfTargetProducts.severity = "severityの中に一致しないものがあります";
+                    summaryOfTargetProducts.Severity = "severityの中に一致しないものがあります";
                     Console.WriteLine("severityの中に一致しないものがあります");
                 }
-                Console.WriteLine(summaryOfTargetProducts.severity);
+                Console.WriteLine(summaryOfTargetProducts.Severity);
             }
             Console.WriteLine(isFirst);
-            Console.WriteLine(summaryOfTargetProducts.vectorString);
-            Console.WriteLine(summaryOfTargetProducts.baseScore);
-            Console.WriteLine(summaryOfTargetProducts.temporalScore);
-            Console.WriteLine(summaryOfTargetProducts.severity);
+            Console.WriteLine(summaryOfTargetProducts.VectorString);
+            Console.WriteLine(summaryOfTargetProducts.BaseScore);
+            Console.WriteLine(summaryOfTargetProducts.TemporalScore);
+            Console.WriteLine(summaryOfTargetProducts.Severity);
             Console.WriteLine(WIN2008 + ":" + containsWIN2008);
             Console.WriteLine(WIN2012 + ":" + containsWIN2012);
             Console.WriteLine(WIN2016 + ":" + containsWIN2016);
