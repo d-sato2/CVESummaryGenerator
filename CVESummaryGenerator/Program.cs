@@ -56,14 +56,12 @@ namespace CVESummaryGenerator
             Console.WriteLine("詳細:{0}", sg.Description.Replace("\n", ""));
             Console.WriteLine("一般に公開:{0}", sg.PubliclyDisclosed); // 一般に公開
             Console.WriteLine("悪用:{0}", sg.Exploited); // 悪用
-            SecurityGuidance.ExploitabilityAssessment.LatestReleaseExploitability LatestReleaseExploitability = new SecurityGuidance.ExploitabilityAssessment.LatestReleaseExploitability();
-            SecurityGuidance.ExploitabilityAssessment.OlderReleaseExploitability OlderReleaseExploitability = new SecurityGuidance.ExploitabilityAssessment.OlderReleaseExploitability();
             Console.WriteLine("最新のソフトウェア リリース:{0}-{1}"
-                                , LatestReleaseExploitability.Id
-                                , LatestReleaseExploitability.Name); // 最新のソフトウェア リリース
+                                , sg.ExploitabilityAssessment.LatestReleaseExploitability.Id
+                                , sg.ExploitabilityAssessment.LatestReleaseExploitability.Name); // 最新のソフトウェア リリース
             Console.WriteLine("過去のソフトウェア リリース:{0}-{1}"
-                                , OlderReleaseExploitability.Id
-                                , OlderReleaseExploitability.Name); // 過去のソフトウェア リリース
+                                , sg.ExploitabilityAssessment.OlderReleaseExploitability.Id
+                                , sg.ExploitabilityAssessment.OlderReleaseExploitability.Name); // 過去のソフトウェア リリース
 
             // TODO：「サービス拒否」の項目はjsonにないのか確認
 
@@ -74,7 +72,7 @@ namespace CVESummaryGenerator
             var listbaseScore = new List<double>();
             var listtemporalScore = new List<double>();
             var listseverity = new List<string>();
-            SecurityGuidance.AffectedProduct summaryOfTargetProducts = new SecurityGuidance.AffectedProduct();
+            AffectedProduct summaryOfTargetProducts = new AffectedProduct();
             bool isFirst = true;
             string containsWIN2008 = "☓";
             string containsWIN2012 = "☓";
@@ -130,6 +128,7 @@ namespace CVESummaryGenerator
             Console.WriteLine(WIN2008 + ":" + containsWIN2008);
             Console.WriteLine(WIN2012 + ":" + containsWIN2012);
             Console.WriteLine(WIN2016 + ":" + containsWIN2016);
+            Console.ReadLine();
 
         }
     }
