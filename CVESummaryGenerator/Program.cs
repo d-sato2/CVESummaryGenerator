@@ -17,8 +17,6 @@ namespace CVESummaryGenerator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.ReadLine();
             string WIN2008 = "Windows Server 2008 for 32-bit Systems Service Pack 2";
             string WIN2012 = "Windows Server 2012 R2 (Server Core installation)";
             string WIN2016 = "Windows Server 2016  (Server Core installation)";
