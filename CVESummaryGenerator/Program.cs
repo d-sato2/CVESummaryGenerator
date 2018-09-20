@@ -46,33 +46,33 @@ namespace CVESummaryGenerator
             // ダウンロードしたjson文字列を出力
             Console.WriteLine(jsonString);
 
-            // json形式にシリアライズ
-            RootObject json = JsonConvert.DeserializeObject<RootObject>(jsonString);
+            // JSONを.NETのクラスにデシリアライズ
+            SecurityGuidance sg = JsonConvert.DeserializeObject<SecurityGuidance>(jsonString);
 
             //まとめ作成
             //全製品共通項目
             Console.WriteLine("CVE:{0}", cve);
-            Console.WriteLine("概要:{0}", json.cveTitle);
-            Console.WriteLine("詳細:{0}", json.description.Replace("\n", ""));
-            Console.WriteLine("一般に公開:{0}", json.publiclyDisclosed); // 一般に公開
-            Console.WriteLine("悪用:{0}", json.exploited); // 悪用
+            Console.WriteLine("概要:{0}", sg.cveTitle);
+            Console.WriteLine("詳細:{0}", sg.description.Replace("\n", ""));
+            Console.WriteLine("一般に公開:{0}", sg.publiclyDisclosed); // 一般に公開
+            Console.WriteLine("悪用:{0}", sg.exploited); // 悪用
             Console.WriteLine("最新のソフトウェア リリース:{0}-{1}"
-                                , json.exploitabilityAssessment.latestReleaseExploitability.id
-                                , json.exploitabilityAssessment.latestReleaseExploitability.name); // 最新のソフトウェア リリース
+                                , sg.exploitabilityAssessment.latestReleaseExploitability.id
+                                , sg.exploitabilityAssessment.latestReleaseExploitability.name); // 最新のソフトウェア リリース
             Console.WriteLine("過去のソフトウェア リリース:{0}-{1}"
-                                , json.exploitabilityAssessment.olderReleaseExploitability.id
-                                , json.exploitabilityAssessment.olderReleaseExploitability.name); // 過去のソフトウェア リリース
+                                , sg.exploitabilityAssessment.olderReleaseExploitability.id
+                                , sg.exploitabilityAssessment.olderReleaseExploitability.name); // 過去のソフトウェア リリース
 
             // TODO：「サービス拒否」の項目はjsonにないのか確認
 
             //各製品共通項目
-            // json.affectedProducts.ForEach(n => Console.WriteLine("name:{0}, vectorstring:{1}", n.name, n.vectorString));
-            var targetProducts = json.affectedProducts.Where(n => n.name == WIN2008 || n.name == WIN2012 || n.name == WIN2016);
+            // sg.affectedProducts.ForEach(n => Console.WriteLine("name:{0}, vectorstring:{1}", n.name, n.vectorString));
+            var targetProducts = sg.affectedProducts.Where(n => n.name == WIN2008 || n.name == WIN2012 || n.name == WIN2016);
             var listCVSS = new List<string>();
             var listbaseScore = new List<double>();
             var listtemporalScore = new List<double>();
             var listseverity = new List<string>();
-            AffectedProduct summaryOfTargetProducts = new AffectedProduct();
+            SecurityGuidance.AffectedProduct summaryOfTargetProducts = new SecurityGuidance.AffectedProduct();
             bool isFirst = true;
             string containsWIN2008 = "☓";
             string containsWIN2012 = "☓";
@@ -130,92 +130,5 @@ namespace CVESummaryGenerator
             Console.WriteLine(WIN2016 + ":" + containsWIN2016);
 
         }
-    }
-    public class AffectedProduct
-    {
-        public string name { get; set; }
-        public object platform { get; set; }
-        public int impactId { get; set; }
-        public string impact { get; set; }
-        public int severityId { get; set; }
-        public string severity { get; set; }
-        public double baseScore { get; set; }
-        public double temporalScore { get; set; }
-        public double environmentScore { get; set; }
-        public string vectorString { get; set; }
-        public object supersedence { get; set; }
-        public object knowledgeBaseId { get; set; }
-        public object knowledgeBaseUrl { get; set; }
-        public object monthlyKnowledgeBaseId { get; set; }
-        public object monthlyKnowledgeBaseUrl { get; set; }
-        public object downloadUrl { get; set; }
-        public object downloadTitle { get; set; }
-        public object monthlyDownloadUrl { get; set; }
-        public object monthlyDownloadTitle { get; set; }
-        public string articleTitle1 { get; set; }
-        public string articleUrl1 { get; set; }
-        public string downloadTitle1 { get; set; }
-        public string downloadUrl1 { get; set; }
-        public bool doesRowOneHaveAtLeastOneArticleOrUrl { get; set; }
-        public string articleTitle2 { get; set; }
-        public object articleUrl2 { get; set; }
-        public string downloadTitle2 { get; set; }
-        public object downloadUrl2 { get; set; }
-        public bool doesRowTwoHaveAtLeastOneArticleOrUrl { get; set; }
-        public string articleTitle3 { get; set; }
-        public object articleUrl3 { get; set; }
-        public string downloadTitle3 { get; set; }
-        public object downloadUrl3 { get; set; }
-        public bool doesRowThreeHaveAtLeastOneArticleOrUrl { get; set; }
-        public string articleTitle4 { get; set; }
-        public object articleUrl4 { get; set; }
-        public string downloadTitle4 { get; set; }
-        public object downloadUrl4 { get; set; }
-        public bool doesRowFourHaveAtLeastOneArticleOrUrl { get; set; }
-        public int countOfRowsWithAtLeastOneArticleOrUrl { get; set; }
-    }
-
-    public class Revision
-    {
-        public string version { get; set; }
-        public DateTime date { get; set; }
-        public string description { get; set; }
-    }
-
-    public class LatestReleaseExploitability
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-    }
-
-    public class OlderReleaseExploitability
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-    }
-
-    public class ExploitabilityAssessment
-    {
-        public LatestReleaseExploitability latestReleaseExploitability { get; set; }
-        public OlderReleaseExploitability olderReleaseExploitability { get; set; }
-        public object denialOfServiceExploitability { get; set; }
-    }
-
-    public class RootObject
-    {
-        public DateTime publishedDate { get; set; }
-        public string cveNumber { get; set; }
-        public List<AffectedProduct> affectedProducts { get; set; }
-        public string cveTitle { get; set; }
-        public string description { get; set; }
-        public List<object> workarounds { get; set; }
-        public List<object> mitigations { get; set; }
-        public List<object> acknowledgments { get; set; }
-        public string disclaimer { get; set; }
-        public List<Revision> revisions { get; set; }
-        public string frequentlyAskedQuestions { get; set; }
-        public ExploitabilityAssessment exploitabilityAssessment { get; set; }
-        public string publiclyDisclosed { get; set; }
-        public string exploited { get; set; }
     }
 }
