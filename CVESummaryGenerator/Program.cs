@@ -72,20 +72,6 @@ namespace CVESummaryGenerator
 
             // DataSetにDataTableを追加
             dataSet.Tables.Add(table);
-            
-            //まとめ作成
-            //全製品共通項目
-            Console.WriteLine("CVE:{0}", cve);
-            Console.WriteLine("概要:{0}", sg.CveTitle);
-            Console.WriteLine("詳細:{0}", sg.Description.Replace("\n", ""));
-            Console.WriteLine("一般に公開:{0}", sg.PubliclyDisclosed); // 一般に公開
-            Console.WriteLine("悪用:{0}", sg.Exploited); // 悪用
-            Console.WriteLine("最新のソフトウェア リリース:{0}-{1}"
-                                , sg.ExploitabilityAssessment.LatestReleaseExploitability.Id
-                                , sg.ExploitabilityAssessment.LatestReleaseExploitability.Name); // 最新のソフトウェア リリース
-            Console.WriteLine("過去のソフトウェア リリース:{0}-{1}"
-                                , sg.ExploitabilityAssessment.OlderReleaseExploitability.Id
-                                , sg.ExploitabilityAssessment.OlderReleaseExploitability.Name); // 過去のソフトウェア リリース
 
             // TODO：「サービス拒否」の項目はjsonにないのか確認
 
@@ -104,55 +90,42 @@ namespace CVESummaryGenerator
             // 対象製品データのうち値が同じ項目は一つにまとめる
             foreach (var product in targetProducts)
             {
-                if (isFirst)
-                {
-                    summaryOfTargetProducts = product;
-                    isFirst = false;
-                }
-
+                // ＣＶＥの対象製品が以下の製品のどれに該当するかチェックする
                 if (product.Name == WIN2008) { containsWIN2008 = "○"; }
                 if (product.Name == WIN2012) { containsWIN2012 = "○"; }
                 if (product.Name == WIN2016) { containsWIN2016 = "○"; }
 
-                if (summaryOfTargetProducts.VectorString == null)
+                if (isFirst)
                 {
-                    summaryOfTargetProducts.VectorString = product.VectorString;
+                    summaryOfTargetProducts = product;
+                    isFirst = false;
+                    continue;
                 }
-                else if (!summaryOfTargetProducts.VectorString.Equals(product.VectorString))
+
+                if (!summaryOfTargetProducts.VectorString.Equals(product.VectorString))
                 {
                     summaryOfTargetProducts.VectorString = "vectorStringの中に一致しないものがあります";
+                    Console.WriteLine(summaryOfTargetProducts.VectorString);
                 }
-                Console.WriteLine(summaryOfTargetProducts.VectorString);
-
+                
                 if (!summaryOfTargetProducts.BaseScore.Equals(product.BaseScore))
                 {
                     summaryOfTargetProducts.BaseScore = 0;
                     Console.WriteLine("baseScoreの中に一致しないものがあります");
                 }
-                Console.WriteLine(summaryOfTargetProducts.BaseScore);
 
                 if (!summaryOfTargetProducts.TemporalScore.Equals(product.TemporalScore))
                 {
                     summaryOfTargetProducts.TemporalScore = 0;
                     Console.WriteLine("temporalScoreの中に一致しないものがあります");
                 }
-                Console.WriteLine(summaryOfTargetProducts.TemporalScore);
 
                 if (!summaryOfTargetProducts.Severity.Equals(product.Severity))
                 {
                     summaryOfTargetProducts.Severity = "severityの中に一致しないものがあります";
                     Console.WriteLine("severityの中に一致しないものがあります");
                 }
-                Console.WriteLine(summaryOfTargetProducts.Severity);
             }
-            Console.WriteLine(isFirst);
-            Console.WriteLine(summaryOfTargetProducts.VectorString);
-            Console.WriteLine(summaryOfTargetProducts.BaseScore);
-            Console.WriteLine(summaryOfTargetProducts.TemporalScore);
-            Console.WriteLine(summaryOfTargetProducts.Severity);
-            Console.WriteLine(WIN2008 + ":" + containsWIN2008);
-            Console.WriteLine(WIN2012 + ":" + containsWIN2012);
-            Console.WriteLine(WIN2016 + ":" + containsWIN2016);
 
             // tableへのデータ追加用文字列を作成
             var LatestReleaseExploitability = sg.ExploitabilityAssessment.LatestReleaseExploitability.Id.ToString() + "-" + sg.ExploitabilityAssessment.LatestReleaseExploitability.Name; // 最新のソフトウェア リリース
