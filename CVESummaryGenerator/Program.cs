@@ -89,18 +89,19 @@ namespace CVESummaryGenerator
 
             // TODO：「サービス拒否」の項目はjsonにないのか確認
 
-            //各製品共通項目
-            // sg.affectedProducts.ForEach(n => Console.WriteLine("name:{0}, vectorstring:{1}", n.name, n.vectorString));
+            // 対象とする製品のデータを抽出する
             var targetProducts = sg.AffectedProducts.Where(n => n.Name == WIN2008 || n.Name == WIN2012 || n.Name == WIN2016);
-            var listCVSS = new List<string>();
-            var listbaseScore = new List<double>();
-            var listtemporalScore = new List<double>();
-            var listseverity = new List<string>();
+
+            // まとめデータ格納用クラスの初期化
             AffectedProduct summaryOfTargetProducts = new AffectedProduct();
+
+            // ループに用いる変数を初期化
             bool isFirst = true;
             string containsWIN2008 = "☓";
             string containsWIN2012 = "☓";
             string containsWIN2016 = "☓";
+
+            // 対象製品データのうち値が同じ項目は一つにまとめる
             foreach (var product in targetProducts)
             {
                 if (isFirst)
