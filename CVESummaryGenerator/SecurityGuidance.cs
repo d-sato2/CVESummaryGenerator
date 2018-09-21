@@ -5,8 +5,7 @@ using System.Collections.Generic;
 /// CVEのAPIからダウンロードしたJSONデータのデシリアライズ用クラス。
 /// 以下の手順で作成。
 /// １．http://json2csharp.com/ からAPIのJSONデータをC#のクラスへ自動変換
-/// ２．別個のクラスとして作成されたネスト部位を、RootObjectの内部クラスへ移動
-/// ３．RootObjectをSecurityGuidanceへ改名
+/// ２．RootObjectをSecurityGuidanceへ改名
 /// </summary>
 namespace CVESummaryGenerator
 {
