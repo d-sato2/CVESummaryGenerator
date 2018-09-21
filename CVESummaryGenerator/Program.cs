@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Data;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -49,6 +50,29 @@ namespace CVESummaryGenerator
             // JSONを.NETのクラスにデシリアライズ
             SecurityGuidance sg = JsonConvert.DeserializeObject<SecurityGuidance>(jsonString);
 
+            // まとめデータを格納するテーブルを作成
+            DataSet dataSet = new DataSet(); // 表形式のデータをメモリ領域へ格納するクラス
+            DataTable table = new DataTable("SummaryTable"); // 表形式のデータを扱う
+
+            // カラム名の追加
+            table.Columns.Add("CVE");
+            table.Columns.Add("概要");
+            table.Columns.Add("詳細");
+            table.Columns.Add("一般に公開");
+            table.Columns.Add("悪用");
+            table.Columns.Add("最新のソフトウェア リリース");
+            table.Columns.Add("過去のソフトウェア リリース");
+            table.Columns.Add("VectorString");
+            table.Columns.Add("BaseScore", Type.GetType("System.Double"));
+            table.Columns.Add("TemporalScore", Type.GetType("System.Double"));
+            table.Columns.Add("Severity");
+            table.Columns.Add(WIN2008);
+            table.Columns.Add(WIN2012);
+            table.Columns.Add(WIN2016);
+
+            // DataSetにDataTableを追加
+            dataSet.Tables.Add(table);
+            
             //まとめ作成
             //全製品共通項目
             Console.WriteLine("CVE:{0}", cve);
@@ -128,6 +152,36 @@ namespace CVESummaryGenerator
             Console.WriteLine(WIN2008 + ":" + containsWIN2008);
             Console.WriteLine(WIN2012 + ":" + containsWIN2012);
             Console.WriteLine(WIN2016 + ":" + containsWIN2016);
+
+            // tableへのデータ追加用文字列を作成
+            var LatestReleaseExploitability = sg.ExploitabilityAssessment.LatestReleaseExploitability.Id.ToString() + "-" + sg.ExploitabilityAssessment.LatestReleaseExploitability.Name; // 最新のソフトウェア リリース
+            var OlderReleaseExploitability = sg.ExploitabilityAssessment.OlderReleaseExploitability.Id.ToString() + "-" + sg.ExploitabilityAssessment.OlderReleaseExploitability.Name; // 過去のソフトウェア リリース
+
+            // Rows.Addメソッドを使ってデータを追加
+            table.Rows.Add(cve
+                , sg.CveTitle
+                , sg.Description.Replace("\n", "")
+                , sg.PubliclyDisclosed
+                , sg.Exploited
+                , LatestReleaseExploitability
+                , OlderReleaseExploitability
+                , summaryOfTargetProducts.VectorString
+                , summaryOfTargetProducts.BaseScore
+                , summaryOfTargetProducts.TemporalScore
+                , summaryOfTargetProducts.Severity
+                , containsWIN2008
+                , containsWIN2012
+                , containsWIN2016);
+
+            Console.WriteLine("tableの中身を表示");
+            foreach (DataRow Row in table.Rows)
+            {
+                for (int i = 0; i < Row.ItemArray.Length; i++)
+                {
+                    Console.WriteLine(Row[i].ToString() + "|");
+                }
+            }
+
             Console.ReadLine();
 
         }
