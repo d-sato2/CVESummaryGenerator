@@ -156,6 +156,15 @@ namespace CVESummaryGenerator
                 }
             }
 
+            // CSVコンバーターを呼び出す
+            DatatableToCSVConverter csv = new DatatableToCSVConverter();
+
+            // カレントディレクトリを取得する
+            string stCurrentDir = System.IO.Directory.GetCurrentDirectory();
+
+            // DataTableをCSVで保存する
+            csv.ConvertDataTableToCsv(table, stCurrentDir + "/test.csv", true);
+
             Console.ReadLine();
 
         }
