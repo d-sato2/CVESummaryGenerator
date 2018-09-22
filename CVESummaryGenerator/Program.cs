@@ -159,11 +159,17 @@ namespace CVESummaryGenerator
             // CSVコンバーターを呼び出す
             DatatableToCSVConverter csv = new DatatableToCSVConverter();
 
-            // カレントディレクトリを取得する
-            string stCurrentDir = System.IO.Directory.GetCurrentDirectory();
+            // カレントディレクトリのパスを取得する
+            string CurrentDir = Directory.GetCurrentDirectory();
+
+            // ファイル名を現在時刻を「西暦月日時分秒」形式で取得する
+            string now = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            // 保存先のCSVファイルのパス
+            string csvPath = CurrentDir + "/" + now + ".csv";
 
             // DataTableをCSVで保存する
-            csv.ConvertDataTableToCsv(table, stCurrentDir + "/test.csv", true);
+            csv.ConvertDataTableToCsv(table, csvPath, true);
 
             Console.ReadLine();
 
